@@ -5,6 +5,10 @@ import memberLeave from "./listeners/memberLeave";
 import { Commands } from "./Commands";
 
 import { botToken } from "./config";
+import collectGuilds from "./data/collectGuilds";
+import collectRoles from "./data/collectRoles";
+import collectChannels from "./data/collectChannels";
+import collectMembers from "./data/collectMembers";
 
 console.log("Bot is starting...");
 
@@ -23,6 +27,11 @@ client.on("ready", async () => {
     await client.application.commands.set(Commands);
 
     console.log(`${client.user.username} is online`);
+
+    collectGuilds(client);
+    collectRoles(client);
+    collectChannels(client);
+    collectMembers(client);
 });
 
 interactionCreate(client);
