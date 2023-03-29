@@ -1,5 +1,6 @@
 import { Client, EmbedBuilder, GuildMember, TextChannel } from "discord.js";
-import { QuerySingle } from "../databaseInteraction";
+import { IRole, RoleType } from "../interfaces/role";
+import { QueryMulti, QuerySingle } from "../databaseInteraction";
 import { getGuild, IGuild } from "../interfaces/guild";
 
 export default (client: Client): void => {
@@ -11,10 +12,20 @@ export default (client: Client): void => {
 async function handleMemberJoin(client: Client, member: GuildMember) {
     QuerySingle(`INSERT INTO discordbot.member SET guildID = "${member.guild.id}", memberID = "${member.id}"`);
 
+    let userRoles: Array<IRole> = await QueryMulti(`SELECT roleID FROM discordbot.role WHERE guildID = "${member.guild.id}" AND roleType = "${RoleType.User}"`);
+
+    userRoles.forEach((userRole) => {
+        let role = member.guild.roles.cache.get(userRole.roleID);
+
+        if (role !== undefined) {
+            member.roles.add(role);
+        }
+    });
+
     let guild: IGuild = await getGuild(member.guild.id);
 
     let channel = undefined;
-    if (guild.memberLog_active && guild.memberLog_channelID != undefined) {
+    if (guild.memberLog_active && guild.memberLog_channelID !== undefined) {
         channel = member.guild.channels.cache.get(guild.memberLog_channelID.toString());
     }
 

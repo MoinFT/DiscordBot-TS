@@ -24,6 +24,10 @@ export const SetRoleType: Command = {
         {
             name: "COLOR",
             value: "COLOR"
+        },
+        {
+            name: "USER",
+            value: "USER"
         }],
         required: true
     }],
@@ -36,6 +40,10 @@ export const SetRoleType: Command = {
             case "COLOR":
                 roleType = RoleType.Color;
                 roleTypeString = "Color";
+                break;
+            case "USER":
+                roleType = RoleType.User;
+                roleTypeString = "User";
                 break;
             default:
                 roleType = RoleType.Default;

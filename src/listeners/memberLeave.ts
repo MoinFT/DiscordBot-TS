@@ -14,7 +14,7 @@ async function handleMemberLeave(client: Client, member: GuildMember | PartialGu
     let guild: IGuild = await getGuild(member.guild.id);
 
     let channel = undefined;
-    if (guild.memberLog_active && guild.memberLog_channelID != undefined) {
+    if (guild.memberLog_active && guild.memberLog_channelID !== undefined) {
         channel = member.guild.channels.cache.get(guild.memberLog_channelID.toString());
     }
 
@@ -40,8 +40,8 @@ async function handleMemberLeave(client: Client, member: GuildMember | PartialGu
             .setDescription(`
                 • Benutzername: ${member.user} - ${member.user.tag}
                 • Erstellt: <t:${Math.floor(member.user.createdTimestamp / 1000)}> (<t:${Math.floor(member.user.createdTimestamp / 1000)}:R>)
-                • Beigetreten: <t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}> (<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000) }:R>)
-                • Verlassen: <t:${Math.floor(new Date().getTime() / 1000)}> (<t:${Math.floor(new Date().getTime() / 1000) }:R>)
+                • Beigetreten: <t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}> (<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>)
+                • Verlassen: <t:${Math.floor(new Date().getTime() / 1000)}> (<t:${Math.floor(new Date().getTime() / 1000)}:R>)
             `)
             .setFooter({ text: `Benutzer hat verlassen • ${memberJoinDateString}`, iconURL: clientIconURL })
             .setColor(0xff6666);
