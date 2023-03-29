@@ -7,5 +7,5 @@ export interface IRole {
 
 export enum RoleType {
     Default,
-
+    Color
 }

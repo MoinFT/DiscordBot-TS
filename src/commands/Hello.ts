@@ -1,7 +1,8 @@
 import { CommandInteraction, Client, ApplicationCommandType } from "discord.js";
-import { Command } from "../Command";
+import { Command, CommandType } from "../Command";
 
 export const Hello: Command = {
+    commandType: CommandType.Ephemeral,
     name: "hello",
     description: "Returns a greeting",
     type: ApplicationCommandType.ChatInput,
@@ -9,7 +10,6 @@ export const Hello: Command = {
         const content = "Hello there!";
 
         await interaction.followUp({
-            ephemeral: true,
             content
         });
     }

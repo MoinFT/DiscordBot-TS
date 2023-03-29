@@ -1,4 +1,5 @@
 import { CommandInteraction, Client, Interaction } from "discord.js";
+import { CommandType } from "../Command";
 import { Commands } from "../Commands";
 
 export default (client: Client): void => {
@@ -16,7 +17,11 @@ const handleSlashCommand = async (client: Client, interaction: CommandInteractio
         return;
     }
 
-    await interaction.deferReply();
+    if (slashCommand.commandType == CommandType.Ephemeral) {
+        await interaction.deferReply({ ephemeral: true });
+    } else {
+        await interaction.deferReply();
+    }
 
     slashCommand.run(client, interaction);
 };
