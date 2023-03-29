@@ -7,11 +7,11 @@ export default (client: Client) => {
         let roles: Array<IRole> = await QueryMulti(`SELECT roleID FROM discordbot.role`);
 
         guild.roles.cache.forEach((role) => {
-            let guildIndex = roles.findIndex((value) => { return value.roleID === parseInt(role.id) });
+            let guildIndex = roles.findIndex((value) => { return value.roleID === role.id });
 
-             if (guildIndex === -1) {
+            if (guildIndex === -1) {
                 QuerySingle(`INSERT INTO discordbot.role SET guildID = "${guild.id}", roleID = "${role.id}", roleType = 0`);
-            } 
+            }
         });
     });
 };

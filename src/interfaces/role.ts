@@ -1,7 +1,7 @@
 export interface IRole {
     id: number
-    guildID: number
-    roleID: number
+    guildID: string
+    roleID: string
     roleType: RoleType
 }
 
