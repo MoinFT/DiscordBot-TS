@@ -1,4 +1,5 @@
 import { Client, EmbedBuilder, GuildMember, TextChannel } from "discord.js";
+import { QuerySingle } from "../databaseInteraction";
 import { getGuild, IGuild } from "../interfaces/guild";
 
 export default (client: Client): void => {
@@ -8,6 +9,8 @@ export default (client: Client): void => {
 };
 
 async function handleMemberJoin(client: Client, member: GuildMember) {
+    QuerySingle(`INSERT INTO discordbot.member SET guildID = "${member.guild.id}", memberID = "${member.id}"`);
+
     let guild: IGuild = await getGuild(member.guild.id);
 
     let channel = undefined;

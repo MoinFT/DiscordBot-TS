@@ -1,4 +1,5 @@
 import { Client, EmbedBuilder, GuildMember, PartialGuildMember, TextChannel } from "discord.js";
+import { QuerySingle } from "../databaseInteraction";
 import { getGuild, IGuild } from "../interfaces/guild";
 
 export default (client: Client): void => {
@@ -8,6 +9,8 @@ export default (client: Client): void => {
 };
 
 async function handleMemberLeave(client: Client, member: GuildMember | PartialGuildMember) {
+    QuerySingle(`DELETE FROM discordbot.member WHERE guildID = "${member.guild.id}" AND memberID = "${member.id}"`);
+
     let guild: IGuild = await getGuild(member.guild.id);
 
     let channel = undefined;
