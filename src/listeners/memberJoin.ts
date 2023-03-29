@@ -1,4 +1,5 @@
 import { Client, EmbedBuilder, GuildMember, TextChannel } from "discord.js";
+import { getGuild, IGuild } from "../interfaces/guild";
 
 export default (client: Client): void => {
     client.on("guildMemberAdd", (member: GuildMember) => {
@@ -6,8 +7,13 @@ export default (client: Client): void => {
     });
 };
 
-function handleMemberJoin(client: Client, member: GuildMember) {
-    let channel = member.guild.channels.cache.get('<ChannelID>');
+async function handleMemberJoin(client: Client, member: GuildMember) {
+    let guild: IGuild = await getGuild(member.guild.id);
+
+    let channel = undefined;
+    if (guild.memberLog_active && guild.memberLog_channelID != undefined) {
+        channel = member.guild.channels.cache.get(guild.memberLog_channelID.toString());
+    }
 
     if (channel !== undefined && channel?.isTextBased()) {
         channel = channel as TextChannel;
@@ -31,7 +37,7 @@ function handleMemberJoin(client: Client, member: GuildMember) {
             .setDescription(`
                 • Benutzername: ${member.user} - ${member.user.tag}
                 • Erstellt: <t:${Math.floor(member.user.createdTimestamp / 1000)}> (<t:${Math.floor(member.user.createdTimestamp / 1000)}:R>)
-                • Beigetreten: <t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}> (<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000) }:R>)
+                • Beigetreten: <t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}> (<t:${Math.floor((member.joinedTimestamp ?? 0) / 1000)}:R>)
             `)
             .setFooter({ text: `Benutzer ist beigetreten • ${memberJoinDateString}`, iconURL: clientIconURL })
             .setColor(0x77FF55);

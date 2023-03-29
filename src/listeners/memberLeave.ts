@@ -1,4 +1,5 @@
 import { Client, EmbedBuilder, GuildMember, PartialGuildMember, TextChannel } from "discord.js";
+import { getGuild, IGuild } from "../interfaces/guild";
 
 export default (client: Client): void => {
     client.on("guildMemberRemove", (member: GuildMember | PartialGuildMember) => {
@@ -6,8 +7,13 @@ export default (client: Client): void => {
     });
 };
 
-function handleMemberLeave(client: Client, member: GuildMember | PartialGuildMember) {
-    let channel = member.guild.channels.cache.get('<ChannelID>');
+async function handleMemberLeave(client: Client, member: GuildMember | PartialGuildMember) {
+    let guild: IGuild = await getGuild(member.guild.id);
+
+    let channel = undefined;
+    if (guild.memberLog_active && guild.memberLog_channelID != undefined) {
+        channel = member.guild.channels.cache.get(guild.memberLog_channelID.toString());
+    }
 
     if (channel !== undefined && channel?.isTextBased()) {
         channel = channel as TextChannel;
