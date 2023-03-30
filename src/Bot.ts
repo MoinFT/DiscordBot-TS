@@ -9,6 +9,8 @@ import collectGuilds from "./data/collectGuilds";
 import collectRoles from "./data/collectRoles";
 import collectChannels from "./data/collectChannels";
 import collectMembers from "./data/collectMembers";
+import roleCreate from "./listeners/roleCreate";
+import roleDelete from "./listeners/roleDelete";
 
 console.log("Bot is starting...");
 
@@ -45,5 +47,7 @@ client.on("ready", async () => {
 interactionCreate(client);
 memberJoin(client);
 memberLeave(client);
+roleCreate(client);
+roleDelete(client);
 
 client.login(botToken);
