@@ -7,10 +7,20 @@ export default (client: Client) => {
         let members: Array<IMember> = await QueryMulti(`SELECT guildID, memberID FROM discordbot.member`);
 
         guild.members.cache.forEach((member) => {
-            let guildIndex = members.findIndex((value) => { return value.guildID === member.guild.id && value.memberID === member.id });
+            let memberIndex = members.findIndex((value) => { return value.guildID === member.guild.id && value.memberID === member.id });
 
-            if (guildIndex === -1) {
+            if (memberIndex === -1) {
                 QuerySingle(`INSERT INTO discordbot.member SET guildID = "${guild.id}", memberID = "${member.id}"`);
+            }
+        });
+
+        members.forEach((value) => {
+            let memberKey = guild.members.cache.findKey((member) => {
+                return member.id === value.memberID;
+            });
+
+            if (value.guildID === guild.id && memberKey === undefined) {
+                QuerySingle(`DELETE FROM discordbot.member WHERE guildID = "${value.guildID}" AND memberID = "${value.memberID}"`);
             }
         });
     });
