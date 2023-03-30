@@ -1,4 +1,4 @@
-import { ActivityType, Client, IntentsBitField } from "discord.js";
+import { ActivityType, Client, IntentsBitField, PermissionFlagsBits } from "discord.js";
 import interactionCreate from "./listeners/interactionCreate";
 import memberJoin from "./listeners/memberJoin";
 import memberLeave from "./listeners/memberLeave";
@@ -31,14 +31,6 @@ client.on("ready", async () => {
         return;
     }
     await client.application.commands.set(Commands);
-
-    AdminCommands.forEach((adminCommandValue) => {
-        let command = client.application?.commands.cache.find((value) => { return value.name === adminCommandValue.name });
-
-        if (command !== undefined) {
-            command.setDefaultMemberPermissions("Administrator");
-        }
-    });
 
     console.log(`${client.user.username} is online`);
 
