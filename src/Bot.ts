@@ -13,6 +13,8 @@ import roleCreate from "./listeners/roleCreate";
 import roleDelete from "./listeners/roleDelete";
 import channelCreate from "./listeners/channelCreate";
 import channelDelete from "./listeners/channelDelete";
+import guildCreate from "./listeners/guildCreate";
+import guildDelete from "./listeners/guildDelete";
 
 console.log("Bot is starting...");
 
@@ -53,5 +55,7 @@ roleCreate(client);
 roleDelete(client);
 channelCreate(client);
 channelDelete(client);
+guildCreate(client);
+guildDelete(client);
 
 client.login(botToken);

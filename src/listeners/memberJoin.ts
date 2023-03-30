@@ -25,7 +25,7 @@ async function handleMemberJoin(client: Client, member: GuildMember) {
     let guild: IGuild = await getGuild(member.guild.id);
 
     let channel = undefined;
-    if (guild.memberLog_active && guild.memberLog_channelID !== undefined) {
+    if (guild.memberLog_active && guild.memberLog_channelID !== undefined && member.id !== client.application?.id) {
         channel = member.guild.channels.cache.get(guild.memberLog_channelID.toString());
     }
 
