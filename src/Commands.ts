@@ -28,9 +28,12 @@ export const AllCommands: Array<Command> = DefaultCommands.concat(GuildCommands)
 export const setGuildSpecificCommands = async (guild: Guild) => {
     let commands: Array<Command> = [];
 
-    commands.concat(await roleTypeSpecificCommands(guild));
-
-        guild.commands.set(commands);
+    let roleTypeCommands: Array<Command> = await roleTypeSpecificCommands(guild)
+    roleTypeCommands.forEach((command) => {
+        commands.push(command);
+    });
+    
+    guild.commands.set(commands)
 }
 
 const roleTypeSpecificCommands = async (guild: Guild) => {
