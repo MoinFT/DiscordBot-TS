@@ -3,6 +3,7 @@ import { QuerySingle } from "../../databaseInteraction";
 import { RoleType } from "../../interfaces/role";
 import { Command, CommandType } from "../../Command";
 import { setGuildSpecificCommands } from "../../Commands";
+import { roleIsHigher } from "../../utils/client";
 
 export const SetRoleType: Command = {
     commandType: CommandType.Ephemeral,
@@ -51,11 +52,20 @@ export const SetRoleType: Command = {
                 roleTypeString = "Default";
         }
 
-        QuerySingle(`UPDATE discordbot.role SET roleType = ${roleType} WHERE guildID = ${interaction.guildId} AND roleID = ${interaction.options.data.at(0)?.role?.id}`)
+        let content: string;
+        let rolePositionHigher = roleIsHigher(client, interaction.guildId, interaction.options.data.at(0)?.role)
+
+        if (rolePositionHigher !== undefined && rolePositionHigher) {
+            QuerySingle(`UPDATE discordbot.role SET roleType = ${roleType} WHERE guildID = ${interaction.guildId} AND roleID = ${interaction.options.data.at(0)?.role?.id}`);
+
+            content = `The role ${interaction.options.data.at(0)?.role} was assigned the role type "${roleTypeString}"`;
+        } else {
+            QuerySingle(`UPDATE discordbot.role SET roleType = ${RoleType.Default} WHERE guildID = ${interaction.guildId} AND roleID = ${interaction.options.data.at(0)?.role?.id}`);
+
+            content = `The role ${interaction.options.data.at(0)?.role} was not assigned a role type!\nThe Bot has not the required permissions to interact with this role!`;
+        }
 
         setGuildSpecificCommands(interaction);
-
-        let content = `The role ${interaction.options.data.at(0)?.role} was assigned the role type "${roleTypeString}"`;
 
         await interaction.followUp({
             content
