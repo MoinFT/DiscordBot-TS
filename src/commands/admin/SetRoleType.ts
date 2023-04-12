@@ -55,7 +55,7 @@ export const SetRoleType: Command = {
         let content: string;
         let rolePositionHigher = roleIsHigher(client, interaction.guildId, interaction.options.data.at(0)?.role)
 
-        if (rolePositionHigher !== undefined && rolePositionHigher) {
+        if (rolePositionHigher !== undefined && !rolePositionHigher) {
             QuerySingle(`UPDATE discordbot.role SET roleType = ${roleType} WHERE guildID = ${interaction.guildId} AND roleID = ${interaction.options.data.at(0)?.role?.id}`);
 
             content = `The role ${interaction.options.data.at(0)?.role} was assigned the role type "${roleTypeString}"`;
@@ -65,7 +65,9 @@ export const SetRoleType: Command = {
             content = `The role ${interaction.options.data.at(0)?.role} was not assigned a role type!\nThe Bot has not the required permissions to interact with this role!`;
         }
 
-        setGuildSpecificCommands(interaction);
+        if (interaction.guild !== null) {
+            setGuildSpecificCommands(interaction.guild);
+        }
 
         await interaction.followUp({
             content

@@ -25,32 +25,18 @@ export const AdminCommands: Array<Command> = getAdminCommands();
 
 export const AllCommands: Array<Command> = DefaultCommands.concat(GuildCommands).concat(AdminCommands);
 
-export const setGuildSpecificCommands = async (interaction: CommandInteraction) => {
+export const setGuildSpecificCommands = async (guild: Guild) => {
     let commands: Array<Command> = [];
 
-    switch (interaction.commandName) {
-        case "set-role-type":
-            let roleTypeCommands: Array<Command> = await roleTypeSpecificCommands(interaction)
-            roleTypeCommands.forEach((command) => {
-                commands.push(command);
-            });
-            break;
-    }
+    commands.concat(await roleTypeSpecificCommands(guild));
 
-    if (interaction.guild !== null) {
-        interaction.guild.commands.set(commands);
-    }
+        guild.commands.set(commands);
 }
 
-const roleTypeSpecificCommands = async (interaction: CommandInteraction) => {
+const roleTypeSpecificCommands = async (guild: Guild) => {
     let commands: Array<Command> = [];
 
-    if (interaction.guild === null) {
-        return commands;
-    }
-    let guild: Guild = interaction.guild;
-
-    let colorRoleIDArray: Array<{ roleID: string }> = await QueryMulti(`SELECT roleID FROM discordbot.role WHERE guildID = ${interaction.guildId} AND roleType = ${RoleType.Color}`);
+    let colorRoleIDArray: Array<{ roleID: string }> = await QueryMulti(`SELECT roleID FROM discordbot.role WHERE guildID = ${guild.id} AND roleType = ${RoleType.Color}`);
 
     if (colorRoleIDArray.length !== 0) {
         let colorRoles: Array<Role> = [];
