@@ -1,8 +1,8 @@
-import { ActivityType, Client, IntentsBitField, PermissionFlagsBits } from "discord.js";
+import { ActivityType, Client, IntentsBitField } from "discord.js";
 import interactionCreate from "./listeners/interactionCreate";
 import memberJoin from "./listeners/memberJoin";
 import memberLeave from "./listeners/memberLeave";
-import { Commands, AdminCommands } from "./Commands";
+import { AdminCommands, DefaultCommands } from "./Commands";
 
 import { botToken } from "./config";
 import collectGuilds from "./data/collectGuilds";
@@ -30,7 +30,7 @@ client.on("ready", async () => {
     if (!client.user || !client.application) {
         return;
     }
-    await client.application.commands.set(Commands);
+    await client.application.commands.set(DefaultCommands.concat(AdminCommands));
 
     console.log(`${client.user.username} is online`);
 

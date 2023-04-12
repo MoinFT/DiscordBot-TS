@@ -2,6 +2,7 @@ import { CommandInteraction, Client, ApplicationCommandType, ApplicationCommandO
 import { QuerySingle } from "../../databaseInteraction";
 import { RoleType } from "../../interfaces/role";
 import { Command, CommandType } from "../../Command";
+import { setGuildSpecificCommands } from "../../Commands";
 
 export const SetRoleType: Command = {
     commandType: CommandType.Ephemeral,
@@ -51,6 +52,8 @@ export const SetRoleType: Command = {
         }
 
         QuerySingle(`UPDATE discordbot.role SET roleType = ${roleType} WHERE guildID = ${interaction.guildId} AND roleID = ${interaction.options.data.at(0)?.role?.id}`)
+
+        setGuildSpecificCommands(interaction);
 
         let content = `The role ${interaction.options.data.at(0)?.role} was assigned the role type "${roleTypeString}"`;
 
