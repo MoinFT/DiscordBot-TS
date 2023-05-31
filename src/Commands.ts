@@ -1,12 +1,14 @@
+import { ApplicationCommandOptionType, Guild, PermissionFlagsBits, Role } from "discord.js";
 import { Command } from "./Command";
+
 import { Hello } from "./commands/Hello";
+import { Show } from "./commands/Show";
+
+import { Color } from "./commands/Color";
 
 import { SetRoleType } from "./commands/admin/SetRoleType";
 import { SetMemberLogChannel } from "./commands/admin/SetMemberLogChannel";
-import { ApplicationCommandOptionType, CommandInteraction, Guild, PermissionFlagsBits, Role } from "discord.js";
-import { Color } from "./commands/Color";
-import { RoleType } from "./interfaces/role";
-import { QueryMulti } from "./databaseInteraction";
+import { getColorRoles } from "./utils/roles";
 
 const getAdminCommands = () => {
     let AdminCommands: Array<Command> = [SetRoleType, SetMemberLogChannel];
@@ -19,7 +21,7 @@ const getAdminCommands = () => {
     });
 }
 
-export const DefaultCommands: Array<Command> = [Hello];
+export const DefaultCommands: Array<Command> = [Hello, Show];
 export const GuildCommands: Array<Command> = [Color];
 export const AdminCommands: Array<Command> = getAdminCommands();
 
@@ -39,7 +41,7 @@ export const setGuildSpecificCommands = async (guild: Guild) => {
 const roleTypeSpecificCommands = async (guild: Guild) => {
     let commands: Array<Command> = [];
 
-    let colorRoleIDArray: Array<{ roleID: string }> = await QueryMulti(`SELECT roleID FROM discordbot.role WHERE guildID = ${guild.id} AND roleType = ${RoleType.Color}`);
+    let colorRoleIDArray: Array<{ roleID: string }> = await getColorRoles(guild.id);
 
     if (colorRoleIDArray.length !== 0) {
         let colorRoles: Array<Role> = [];
