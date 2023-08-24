@@ -2,6 +2,7 @@ import { CommandInteraction, Client, ApplicationCommandType, ApplicationCommandO
 import { Command, CommandType } from "../Command";
 import { Show_Members } from "./Show_Members";
 import { Show_Member } from "./Show_Member";
+import { Show_Guild } from "./Show_Guild";
 
 export const Show: Command = {
     commandType: CommandType.Ephemeral,
@@ -38,6 +39,11 @@ export const Show: Command = {
                     required: true
                 }
             ]
+        },
+        {
+            name: "guild",
+            description: "Display the guild",
+            type: ApplicationCommandOptionType.Subcommand
         }
     ],
     run: async (client: Client, interaction: CommandInteraction) => {
@@ -49,7 +55,10 @@ export const Show: Command = {
                     Show_Members(client, interaction);
                     break;
                 case "member":
-                    Show_Member(client, interaction)
+                    Show_Member(client, interaction);
+                    break;
+                case "guild":
+                    Show_Guild(client, interaction);
             }
         }
     }
