@@ -1,8 +1,7 @@
 import { ApplicationCommandOptionType, Client, Collection, CommandInteraction, Guild, GuildMember, codeBlock } from "discord.js";
-import { getColorRoles, highestNoneColorRole } from "../utils/roles";
+import { highestNoneColorRole } from "../utils/roles";
 
 export const Show_Members = async (client: Client, interaction: CommandInteraction) => {
-
     let members: Collection<string, GuildMember> | undefined;
     if (interaction.guild !== null) {
         members = interaction.guild.members.cache;
@@ -43,7 +42,7 @@ export const Show_Members = async (client: Client, interaction: CommandInteracti
 
         if (search !== undefined) {
             let searchString = search;
-            members = members.filter((member) => {return member.user.username.includes(searchString) || member.nickname?.includes(searchString)});
+            members = members.filter((member) => { return member.user.username.includes(searchString) || member.nickname?.includes(searchString) });
         }
 
         let membersArray: Array<GuildMember> = [];
