@@ -1,7 +1,5 @@
 import { ActivityType, Client, IntentsBitField } from "discord.js";
 import interactionCreate from "./listeners/interactionCreate";
-import memberJoin from "./listeners/memberJoin";
-import memberLeave from "./listeners/memberLeave";
 import { AdminCommands, DefaultCommands } from "./Commands";
 
 import { botToken } from "./config";
@@ -9,6 +7,9 @@ import collectGuilds from "./data/collectGuilds";
 import collectRoles from "./data/collectRoles";
 import collectChannels from "./data/collectChannels";
 import collectMembers from "./data/collectMembers";
+import memberJoin from "./listeners/memberJoin";
+import memberUpdate from "./listeners/memberUpdate";
+import memberLeave from "./listeners/memberLeave";
 import roleCreate from "./listeners/roleCreate";
 import roleUpdate from "./listeners/roleUpdate";
 import roleDelete from "./listeners/roleDelete";
@@ -43,6 +44,7 @@ client.on("ready", async () => {
 
 interactionCreate(client);
 memberJoin(client);
+memberUpdate(client);
 memberLeave(client);
 roleCreate(client);
 roleUpdate(client);

@@ -8,10 +8,11 @@ import { Color } from "./commands/Color";
 
 import { SetRoleType } from "./commands/admin/SetRoleType";
 import { SetMemberLogChannel } from "./commands/admin/SetMemberLogChannel";
+import { Toggle } from "./commands/admin/Toggle";
 import { getColorRoles } from "./utils/roles";
 
 const getAdminCommands = () => {
-    let AdminCommands: Array<Command> = [SetRoleType, SetMemberLogChannel];
+    let AdminCommands: Array<Command> = [SetRoleType, SetMemberLogChannel, Toggle];
 
     return AdminCommands.map((command): Command => {
         return {

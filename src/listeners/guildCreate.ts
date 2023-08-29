@@ -11,7 +11,12 @@ async function handleGuildCreate(client: Client, guild: Guild) {
     QuerySingle(`INSERT INTO discordbot.guild SET guildID = "${guild.id}", ownerID = "${guild.ownerId}", memberLog_active = 0`);
 
     guild.members.cache.forEach((member) => {
-        QuerySingle(`INSERT INTO discordbot.member SET guildID = "${guild.id}", memberID = "${member.id}"`);
+        let botPermission = false;
+        if (member.permissions.has("Administrator")) {
+            botPermission = true;
+        }
+
+        QuerySingle(`INSERT INTO discordbot.member SET guildID = "${guild.id}", memberID = "${member.id}", botPermission = ${botPermission}`);
     });
 
     guild.roles.cache.forEach((role) => {

@@ -4,7 +4,7 @@ CREATE TABLE
         `guildID` varchar(31) NOT NULL,
         `ownerID` varchar(31) NOT NULL,
         `memberLog_active` tinyint(1) NOT NULL,
-        `memberLog_channelID` bigint,
+        `memberLog_channelID` varchar(31),
         PRIMARY KEY (`id`),
         UNIQUE KEY `id_UNIQUE` (`id`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
@@ -34,6 +34,7 @@ CREATE TABLE
         `id` int unsigned NOT NULL AUTO_INCREMENT,
         `guildID` varchar(31) NOT NULL,
         `memberID` varchar(31) NOT NULL,
+        `botPermission` tinyint NOT NULL,
         PRIMARY KEY (`id`),
         UNIQUE KEY `id_UNIQUE` (`id`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;

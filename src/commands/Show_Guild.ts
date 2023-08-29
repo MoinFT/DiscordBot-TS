@@ -7,10 +7,6 @@ export const Show_Guild = async (client: Client, interaction: CommandInteraction
         guild = interaction.guild;
     }
 
-    if (guild !== undefined) {
-
-    }
-
     let owner: GuildMember | undefined;
     if (guild !== undefined) {
         let members = guild.members.cache;

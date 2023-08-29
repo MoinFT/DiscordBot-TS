@@ -1,8 +1,7 @@
-import { Client, Collection, CommandInteraction, EmbedBuilder, Guild, GuildMember, User, inlineCode, time, userMention } from "discord.js";
-import { highestNoneColorRole } from "../utils/roles";
-import { getMember } from "../utils/member";
+import { Client, Collection, CommandInteraction, EmbedBuilder, Guild, GuildMember, User, time } from "discord.js";
+import { getMember, setBotPermission } from "../../utils/member";
 
-export const Show_Member = async (client: Client, interaction: CommandInteraction) => {
+export const Toggle_BotPermission = async (client: Client, interaction: CommandInteraction) => {
     let guild: Guild | undefined;
     let members: Collection<string, GuildMember> | undefined;
     if (interaction.guild !== null) {
@@ -31,29 +30,20 @@ export const Show_Member = async (client: Client, interaction: CommandInteractio
     if (guild !== undefined && user !== undefined && member !== undefined) {
         let embedMessage = new EmbedBuilder();
 
+        let dbMember = await getMember(guild.id, member.id);
+
+        setBotPermission(guild.id, member.id, !dbMember.botPermission)
+
         let userAvatarURL = user.avatarURL();
+        let newBotPermission = !dbMember.botPermission;
         let nickname = member.nickname;
         let joinedAt = member.joinedAt;
 
-        let highestRole = await highestNoneColorRole(member.guild.id, member.roles.cache);
-        let color = 0;
-        let roleName = "everyone";
-        if (highestRole !== undefined) {
-            color = highestRole.color;
-            roleName = highestRole.name;
-        }
-
         if (userAvatarURL !== null) {
-            embedMessage.setAuthor({ name: member.user.username, iconURL: userAvatarURL });
-            embedMessage.setThumbnail(userAvatarURL);
+            embedMessage.setAuthor({ name: user.username, iconURL: userAvatarURL });
         } else {
-            embedMessage.setAuthor({ name: member.user.username });
+            embedMessage.setAuthor({ name: user.username });
         }
-
-        embedMessage.setTitle("Member Info");
-        embedMessage.setColor(color)
-
-        embedMessage.addFields({ name: "Username", value: member.user.username, inline: true });
 
         if (nickname !== null) {
             embedMessage.addFields({ name: "Nickname", value: nickname, inline: true });
@@ -63,17 +53,14 @@ export const Show_Member = async (client: Client, interaction: CommandInteractio
             embedMessage.addFields({ name: "Server Member since", value: time(joinedAt, 'R') });
         }
 
-        embedMessage.addFields({ name: "Highest Role", value: roleName, inline: true });
-
-        if (member.id === guild.ownerId) {
-            embedMessage.addFields({ name: "Server Owner", value: "Yes", inline: true });
+        let botPermissionString = "No";
+        embedMessage.setColor(0xff6666);
+        if (newBotPermission) {
+            botPermissionString = "Yes";
+            embedMessage.setColor(0x77FF55);
         }
 
-        if ((await getMember(guild.id, interaction.user.id)).botPermission) {
-            let memberBotPermission = (await getMember(guild.id, member.id)).botPermission
-
-            embedMessage.addFields({ name: "Bot Permission", value: memberBotPermission ? "Yes" : "No", inline: true });
-        }
+        embedMessage.addFields({ name: "Bot-Permission", value: botPermissionString });
 
         let botUser = client.user;
         if (botUser !== null) {

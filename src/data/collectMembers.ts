@@ -10,7 +10,12 @@ export default (client: Client) => {
             let memberIndex = members.findIndex((value) => { return value.guildID === member.guild.id && value.memberID === member.id });
 
             if (memberIndex === -1) {
-                QuerySingle(`INSERT INTO discordbot.member SET guildID = "${guild.id}", memberID = "${member.id}"`);
+                let botPermission = false;
+                if (member.permissions.has("Administrator")) {
+                    botPermission = true;
+                }
+
+                QuerySingle(`INSERT INTO discordbot.member SET guildID = "${guild.id}", memberID = "${member.id}", botPermission = ${botPermission}`);
             }
         });
 
